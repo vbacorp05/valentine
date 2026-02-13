@@ -1,1 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Be My Valentine 💖</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  background:#ffd6e8;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:'Pacifico',cursive;
+  overflow:hidden;
+}
+
+.card{
+  width:440px;
+  padding:40px;
+  background:#ff4d6d;
+  border-radius:30px;
+  text-align:center;
+  color:white;
+  box-shadow:0 20px 40px rgba(0,0,0,0.25);
+  position:relative;
+  z-index:2;
+}
+
+h1{
+  font-size:36px;
+  margin-bottom:30px;
+}
+
+button{
+  font-family:'Pacifico',cursive;
+  font-size:18px;
+  padding:14px 22px;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+/* YES button inside card */
+#yesBtn{
+  background:white;
+  color:#ff4d6d;
+}
+
+/* NO button moves freely */
+#noBtn{
+  background:#ffb3c6;
+  color:#800f2f;
+  position:fixed;
+  top:60%;
+  left:50%;
+  z-index:5;
+}
+
+/* Love Page */
+.love-page{
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+}
+
+.love-page img{
+  width:320px;
+  border-radius:25px;
+  margin-bottom:20px;
+}
+
+.love-page h2{
+  font-size:34px;
+  color:#ff4d6d;
+}
+
+/* Heart Rain */
+.heart{
+  position:fixed;
+  top:-20px;
+  color:#ff4d6d;
+  pointer-events:none;
+  animation:fall linear forwards;
+}
+
+@keyframes fall{
+  to{transform:translateY(110vh);opacity:0;}
+}
+</style>
+</head>
+
+<body>
+
+<audio id="song" src="perfect.mp3"></audio>
+
+<div class="card" id="mainCard">
+  <h1>Mahaki, can you be my Valentine? 💕</h1>
+  <button id="yesBtn">Yes, offcourse my kheeer ka Gudda 💖</button>
+</div>
+
+<button id="noBtn">No</button>
+
+<div class="love-page" id="lovePage">
+  <img id="slideshow" src="love1.jpg">
+  <h2>I Loveeee Youuuuu Mahaki ♥♥</h2>
+</div>
+
+<script>
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const mainCard = document.getElementById("mainCard");
+const lovePage = document.getElementById("lovePage");
+const song = document.getElementById("song");
+const slideshow = document.getElementById("slideshow");
+
+const noTexts = [
+  "Abhi nahi 🙈",
+  "Sochungi 🤔",
+  "Impress karo pehle 😏",
+  "Coffee treat do ☕",
+  "Itni jaldi kya hai 😂",
+  "Network issue hai 📶",
+  "Dil confuse hai 💫",
+  "Thoda aur try karo 😜",
+  "Almost maan gayi… 😈"
+];
+
+const images = ["love1.jpg","love2.jpg","love3.jpg","love4.jpg"];
+let imgIndex = 0;
+
+/* NO button moves only when clicked */
+function moveNo(){
+  const yes = yesBtn.getBoundingClientRect();
+  const no = noBtn.getBoundingClientRect();
+
+  let x, y, overlap;
+
+  do {
+    x = Math.random() * (window.innerWidth - no.width - 20);
+    y = Math.random() * (window.innerHeight - no.height - 20);
+
+    overlap =
+      x + no.width > yes.left &&
+      x < yes.right &&
+      y + no.height > yes.top &&
+      y < yes.bottom;
+
+  } while (overlap);
+
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+
+  noBtn.innerText = noTexts[Math.floor(Math.random() * noTexts.length)];
+}
+
+noBtn.addEventListener("click", moveNo);
+
+/* Heart rain */
+function createHeart(){
+  const h = document.createElement("div");
+  h.className = "heart";
+  h.innerText = "♥";
+  h.style.left = Math.random()*100 + "vw";
+  h.style.fontSize = (14 + Math.random()*20) + "px";
+  h.style.animationDuration = (3 + Math.random()*3) + "s";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),6000);
+}
+
+yesBtn.addEventListener("click", ()=>{
+  mainCard.style.display = "none";
+  noBtn.style.display = "none";
+  lovePage.style.display = "flex";
+  song.play();
+
+  setInterval(createHeart, 300);
+  setInterval(()=>{
+    imgIndex = (imgIndex + 1) % images.length;
+    slideshow.src = images[imgIndex];
+  }, 5000);
+});
+</script>
+
+</body>
+</html>
 
